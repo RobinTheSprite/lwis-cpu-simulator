@@ -51,6 +51,14 @@ def add(args):
         register[args[0]] = register[args[0]] + register[args[i]]
 
 
+def sub(args):
+    register[args[0]] = register[args[1]] - register[args[2]]
+    for i in range(3,6):
+        if args[i] == 0:
+            break
+        register[args[0]] = register[args[0]] - register[args[i]]
+
+
 operations = (
     [
         lambda args: None,
@@ -92,6 +100,7 @@ operations = (
         lambda args: div(args),
         lambda args: mul(args),
         lambda args: add(args),
+        lambda args: sub(args)
     ]
 )
 
