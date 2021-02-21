@@ -38,5 +38,5 @@ def sieve(n):
     return result
 
 start = time()
-print(sieve(10000))
+print(sieve(1000000))
 print("Time: {}".format(time()-start))

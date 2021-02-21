@@ -1,7 +1,7 @@
 from time import time
 import traceback
 
-MEMORY_SIZE = 10000
+MEMORY_SIZE = 1000000
 
 stack = []
 memory = list(0 for _ in range(MEMORY_SIZE))
@@ -149,8 +149,8 @@ def process(instructions):
     print("Time: {}".format(time() - start))
 
 instructions = (
-    # n = 10000
-    0x2710020003,
+    # n = 1000000
+    0xF4240020003,
     # n < 2
     0x02030003,
     0x0302060002,
