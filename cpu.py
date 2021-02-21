@@ -122,9 +122,10 @@ def process(instructions):
     layout = 0
     opcode = 0
     sections = []
+    numOfInstructions = len(instructions)
     try:
         register[1] = 0
-        while register[1] != len(instructions):
+        while register[1] != numOfInstructions:
             instruction = instructions[register[1]]
             layout = instruction & masks[8]
             instruction = instruction >> 8
