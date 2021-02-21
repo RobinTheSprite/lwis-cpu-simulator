@@ -18,7 +18,7 @@ def call(mem):
 
 
 def read_stdin(reg):
-    register[reg] = input()
+    register[reg] = int(input())
 
 
 def immediate_to_register(reg, imm):
