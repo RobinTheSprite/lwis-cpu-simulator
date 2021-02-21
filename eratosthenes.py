@@ -37,6 +37,7 @@ def sieve(n):
 
     return result
 
+# Slower than C++ equivalent by a factor of 10
 start = time()
 print(sieve(1000000))
 print("Time: {}".format(time()-start))
