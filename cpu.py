@@ -170,10 +170,11 @@ def process(instructions):
     opcode = 0
     max_length = max(map(len, layouts))
     sections = list(0 for _ in range(max_length))
-    num_of_instructions = len(instructions)
+    length_of_program_memory = len(instructions)
+    instructions_executed = 0
     try:
         register[1] = 0
-        while register[1] != num_of_instructions:
+        while register[1] != length_of_program_memory:
             instruction = instructions[register[1]]
             layout = instruction & masks[8]
             instruction = instruction >> 8
@@ -190,13 +191,19 @@ def process(instructions):
             # print("Line: {} Layout: {} Opcode: {} Arguments: {}".format(register[1], layout, opcode, sections))
             operations[layout][opcode](sections)
 
+            instructions_executed += 1
             register[1] += 1
     except Exception as e:
         print("Error!")
         print("Line: {} Layout: {} Opcode: {} Arguments: {}".format(register[1], layout, opcode, sections))
         traceback.print_exc()
 
-    print("Time: {}".format(time() - start))
+    total_time = time() - start
+    print("Total Time: {} seconds".format(round(total_time, 6)))
+    print("Instructions Executed: {}".format(instructions_executed))
+    print("Average Time per Instruction: {} microseconds".format(
+        round(total_time / instructions_executed * 1e6)
+    ))
 
 instructions = (
     # n = 1000000 (0xF4240)
