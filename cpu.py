@@ -8,10 +8,6 @@ memory = list(0 for _ in range(MEMORY_SIZE))
 register = list(0 for _ in range(256))
 
 
-def nop():
-    pass
-
-
 def ret():
     register[1] = stack[len(stack) - 1]
     stack.pop(len(stack) - 1)
@@ -57,7 +53,7 @@ def add(args):
 
 operations = (
     [
-        lambda args: nop(),
+        lambda args: None,
         lambda args: ret()
     ],
     [
@@ -90,7 +86,7 @@ operations = (
         lambda args: immediate_to_register(args[0], int(register[args[1]] < args[2])),      # Less than
         lambda args: immediate_to_register(args[0], int(register[args[1]] > args[2])),      # Greater than
         lambda args: immediate_to_register(args[0], int(register[args[1]] == args[2])),     # Equal to
-        lambda args: immediate_to_register(1, register[args[1]] + args[2]) if register[args[0]] > 0 else nop()  # Conditional jump
+        lambda args: immediate_to_register(1, register[args[1]] + args[2]) if register[args[0]] > 0 else None  # Conditional jump
     ],
     [
         lambda args: div(args),
