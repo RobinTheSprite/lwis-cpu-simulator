@@ -121,7 +121,9 @@ def process(instructions):
     instruction = 0
     layout = 0
     opcode = 0
-    sections = []
+    maxList = max(layouts, key = len)
+    maxLength = max(map(len, layouts))
+    sections = list(0 for _ in range(maxLength))
     numOfInstructions = len(instructions)
     try:
         register[1] = 0
@@ -133,10 +135,11 @@ def process(instructions):
             opcode = instruction & masks[8]
             instruction = instruction >> 8
 
-            sections.clear()
+            i = 0
             for section_width in layouts[layout]:
-                sections.append(instruction & masks[section_width])
+                sections[i] = instruction & masks[section_width]
                 instruction = instruction >> section_width
+                i += 1
 
             # print("Line: {} Layout: {} Opcode: {} Arguments: {}".format(register[1], layout, opcode, sections))
             operations[layout][opcode](sections)
