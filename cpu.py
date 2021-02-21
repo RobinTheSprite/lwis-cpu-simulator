@@ -118,13 +118,12 @@ def process(instructions):
     instruction = 0
     layout = 0
     opcode = 0
-    maxList = max(layouts, key = len)
-    maxLength = max(map(len, layouts))
-    sections = list(0 for _ in range(maxLength))
-    numOfInstructions = len(instructions)
+    max_length = max(map(len, layouts))
+    sections = list(0 for _ in range(max_length))
+    num_of_instructions = len(instructions)
     try:
         register[1] = 0
-        while register[1] != numOfInstructions:
+        while register[1] != num_of_instructions:
             instruction = instructions[register[1]]
             layout = instruction & masks[8]
             instruction = instruction >> 8
