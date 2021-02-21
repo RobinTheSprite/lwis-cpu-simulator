@@ -58,7 +58,7 @@ operations = (
     ],
     [
         lambda args: print(register[args[0]]),
-        # lambda args: register[args[0]] = input()
+        lambda args: register[args[0]] = input()
     ],
     [
         lambda args: immediate_to_register(args[0], int(register[args[1]] < register[args[2]])),
