@@ -146,6 +146,7 @@ def process(instructions):
     except Exception as e:
         print("Error!")
         print("Line: {} Layout: {} Opcode: {} Arguments: {}".format(register[1], layout, opcode, sections))
+        traceback.print_exc()
 
     print("Time: {}".format(time() - start))
 
