@@ -9,8 +9,16 @@ register = list(0 for _ in range(256))
 
 
 def ret():
-    register[1] = stack[len(stack) - 1]
-    stack.pop(len(stack) - 1)
+    register[1] = stack.pop(len(stack) - 1)
+
+
+def call(mem):
+    stack.append(register[1])
+    register[1] = mem
+
+
+def read_stdin(reg):
+    register[reg] = input()
 
 
 def immediate_to_register(reg, imm):
@@ -59,6 +67,34 @@ def sub(args):
         register[args[0]] = register[args[0]] - register[args[i]]
 
 
+def and_f(args):
+    register[args[0]] = register[args[1]] & register[args[2]]
+    for i in range(3,6):
+        if args[i] == 0:
+            break
+        register[args[0]] = register[args[0]] & register[args[i]]
+
+
+def or_f(args):
+    register[args[0]] = register[args[1]] | register[args[2]]
+    for i in range(3,6):
+        if args[i] == 0:
+            break
+        register[args[0]] = register[args[0]] | register[args[i]]
+
+
+def xor_f(args):
+    register[args[0]] = register[args[1]] ^ register[args[2]]
+    for i in range(3,6):
+        if args[i] == 0:
+            break
+        register[args[0]] = register[args[0]] ^ register[args[i]]
+
+
+def shuffle_move(args):
+    register[args[0]], register[args[1]], register[args[2]] = register[args[3]], register[args[4]], register[args[5]]
+
+
 operations = (
     [
         lambda args: None,
@@ -66,7 +102,7 @@ operations = (
     ],
     [
         lambda args: print(register[args[0]]),
-        lambda args: register[args[0]] = input()
+        lambda args: read_stdin(args[0])
     ],
     [
         lambda args: immediate_to_register(args[0], int(register[args[1]] < register[args[2]])),
@@ -76,8 +112,9 @@ operations = (
         lambda args: immediate_to_register(args[0], int(register[args[1]] <= register[args[2]])),
     ],
     [
-        lambda args: immediate_to_register(args[0], args[1]),
+        lambda args: immediate_to_register(args[0], args[1]),               # Load immediate
         lambda args: immediate_to_register(1, register[args[0]] + args[1]), # Arbitrary jump
+        lambda args: call(register[args[0]] + args[1])
     ],
     [
         lambda args: register_to_memory(args[0], register[args[1]] + args[2]),              # Store
@@ -100,7 +137,11 @@ operations = (
         lambda args: div(args),
         lambda args: mul(args),
         lambda args: add(args),
-        lambda args: sub(args)
+        lambda args: sub(args),
+        lambda args: and_f(args),
+        lambda args: or_f(args),
+        lambda args: xor_f(args),
+        lambda args: shuffle_move(args),
     ]
 )
 
@@ -231,4 +272,4 @@ instructions = (
     # End of loop
 )
 
-process(instructions)
+# process(instructions)
