@@ -105,6 +105,7 @@ layouts = (
     (8, 8, 8, 8, 8, 8)
 )
 
+
 masks = {
     8: 0xFF,
     32: 0xFFFFFFFF,
