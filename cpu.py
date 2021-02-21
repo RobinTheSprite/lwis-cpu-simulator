@@ -101,7 +101,7 @@ operations = (
         lambda args: ret()
     ],
     [
-        lambda args: print(register[args[0]]),
+        lambda args: print(int(register[args[0]]) & 0xFFFFFFFF),
         lambda args: read_stdin(args[0])
     ],
     [
