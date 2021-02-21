@@ -1,4 +1,5 @@
 from time import time
+import traceback
 
 MEMORY_SIZE = 10000
 
@@ -101,12 +102,17 @@ operations = (
 
 layouts = (
     tuple(),
-    (1,), # Extra comma makes it a tuple
-    (1, 1, 1),
-    (1, 4),
-    (1, 1, 4),
-    (1, 1, 1, 1, 1, 1)
+    (8,), # Extra comma makes it a tuple
+    (8, 8, 8),
+    (8, 32),
+    (8, 8, 32),
+    (8, 8, 8, 8, 8, 8)
 )
+
+masks = {
+    8: 0xFF,
+    32: 0xFFFFFFFF,
+}
 
 
 def feed(instruction, width):
@@ -129,16 +135,16 @@ def process(instructions):
         register[1] = 0
         while register[1] != len(instructions):
             instruction = instructions[register[1]]
-            layout = feed(instruction, 1)
+            layout = instruction & masks[8]
             instruction = instruction >> 8
 
-            opcode = feed(instruction, 1)
+            opcode = instruction & masks[8]
             instruction = instruction >> 8
 
             sections.clear()
             for section_width in layouts[layout]:
-                sections.append(feed(instruction, section_width))
-                instruction = instruction >> (section_width * 8)
+                sections.append(instruction & masks[section_width])
+                instruction = instruction >> section_width
 
             # print("Line: {} Layout: {} Opcode: {} Arguments: {}".format(register[1], layout, opcode, sections))
             operations[layout][opcode](sections)
