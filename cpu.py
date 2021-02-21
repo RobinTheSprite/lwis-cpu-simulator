@@ -115,15 +115,6 @@ masks = {
 }
 
 
-def feed(instruction, width):
-
-    section = 0
-    for i in range(0, width):
-        section = section | (instruction & (0xFF << (i * 8)))
-
-    return section
-
-
 def process(instructions):
     start = time()
 
