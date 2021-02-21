@@ -134,14 +134,14 @@ operations = (
         lambda args: immediate_to_register(1, register[args[1]] + args[2]) if register[args[0]] > 0 else None  # Conditional jump
     ],
     [
-        lambda args: div(args),
-        lambda args: mul(args),
-        lambda args: add(args),
-        lambda args: sub(args),
-        lambda args: and_f(args),
-        lambda args: or_f(args),
-        lambda args: xor_f(args),
-        lambda args: shuffle_move(args),
+        div,
+        mul,
+        add,
+        sub,
+        and_f,
+        or_f,
+        xor_f,
+        shuffle_move,
     ]
 )
 
@@ -199,7 +199,7 @@ def process(instructions):
     print("Time: {}".format(time() - start))
 
 instructions = (
-    # n = 1000000
+    # n = 1000000 (0xF4240)
     0xF4240020003,
     # n < 2
     0x02030003,
@@ -272,4 +272,4 @@ instructions = (
     # End of loop
 )
 
-# process(instructions)
+process(instructions)
