@@ -124,6 +124,7 @@ def process(instructions):
     instruction = 0
     layout = 0
     opcode = 0
+    sections = []
     try:
         register[1] = 0
         while register[1] != len(instructions):
@@ -134,7 +135,7 @@ def process(instructions):
             opcode = feed(instruction, 1)
             instruction = instruction >> 8
 
-            sections = []
+            sections.clear()
             for section_width in layouts[layout]:
                 sections.append(feed(instruction, section_width))
                 instruction = instruction >> (section_width * 8)
