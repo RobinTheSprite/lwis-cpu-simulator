@@ -8,20 +8,31 @@ memory = list(0 for _ in range(MEMORY_SIZE))
 register = list(0 for _ in range(256))
 
 
+def check_register(reg):
+    if reg < 2:
+        raise IndexError("Illegal attempt to modify register {}".format(reg))
+
+
+def modify_program_counter(val):
+    register[1] = val
+
+
 def ret():
-    register[1] = stack.pop(len(stack) - 1)
+    modify_program_counter(stack.pop(len(stack) - 1))
 
 
 def call(mem):
     stack.append(register[1])
-    register[1] = mem
+    modify_program_counter(mem)
 
 
 def read_stdin(reg):
+    check_register(reg)
     register[reg] = int(input())
 
 
 def immediate_to_register(reg, imm):
+    check_register(reg)
     register[reg] = imm
 
 
@@ -30,10 +41,13 @@ def register_to_memory(reg, mem):
 
 
 def memory_to_register(mem, reg):
+    check_register(reg)
     register[reg] = memory[mem]
 
 
 def div(args):
+    check_register(args[0])
+    check_register(args[1])
     register[args[0]] = register[args[2]] // register[args[3]]
     register[args[1]] = register[args[2]] % register[args[3]]
     for i in range(4,6):
@@ -44,6 +58,7 @@ def div(args):
 
 
 def mul(args):
+    check_register(args[0])
     register[args[0]] = register[args[1]] * register[args[2]]
     for i in range(3,6):
         if args[i] == 0:
@@ -52,6 +67,7 @@ def mul(args):
 
 
 def add(args):
+    check_register(args[0])
     register[args[0]] = register[args[1]] + register[args[2]]
     for i in range(3,6):
         if args[i] == 0:
@@ -60,6 +76,7 @@ def add(args):
 
 
 def sub(args):
+    check_register(args[0])
     register[args[0]] = register[args[1]] - register[args[2]]
     for i in range(3,6):
         if args[i] == 0:
@@ -68,6 +85,7 @@ def sub(args):
 
 
 def and_f(args):
+    check_register(args[0])
     register[args[0]] = register[args[1]] & register[args[2]]
     for i in range(3,6):
         if args[i] == 0:
@@ -76,6 +94,7 @@ def and_f(args):
 
 
 def or_f(args):
+    check_register(args[0])
     register[args[0]] = register[args[1]] | register[args[2]]
     for i in range(3,6):
         if args[i] == 0:
@@ -84,6 +103,7 @@ def or_f(args):
 
 
 def xor_f(args):
+    check_register(args[0])
     register[args[0]] = register[args[1]] ^ register[args[2]]
     for i in range(3,6):
         if args[i] == 0:
@@ -92,6 +112,9 @@ def xor_f(args):
 
 
 def shuffle_move(args):
+    check_register(args[0])
+    check_register(args[1])
+    check_register(args[2])
     register[args[0]], register[args[1]], register[args[2]] = register[args[3]], register[args[4]], register[args[5]]
 
 
@@ -113,7 +136,7 @@ operations = (
     ],
     [
         lambda args: immediate_to_register(args[0], args[1]),               # Load immediate
-        lambda args: immediate_to_register(1, register[args[0]] + args[1]), # Arbitrary jump
+        lambda args: modify_program_counter(register[args[0]] + args[1]),   # Arbitrary jump
         lambda args: call(register[args[0]] + args[1])
     ],
     [
@@ -131,7 +154,7 @@ operations = (
         lambda args: immediate_to_register(args[0], int(register[args[1]] < args[2])),      # Less than
         lambda args: immediate_to_register(args[0], int(register[args[1]] > args[2])),      # Greater than
         lambda args: immediate_to_register(args[0], int(register[args[1]] == args[2])),     # Equal to
-        lambda args: immediate_to_register(1, register[args[1]] + args[2]) if register[args[0]] > 0 else None  # Conditional jump
+        lambda args: modify_program_counter(register[args[1]] + args[2]) if register[args[0]] > 0 else None  # Conditional jump
     ],
     [
         div,
@@ -173,7 +196,7 @@ def process(instructions):
     length_of_program_memory = len(instructions)
     instructions_executed = 0
     try:
-        register[1] = 0
+        modify_program_counter(0)
         while register[1] != length_of_program_memory:
             instruction = instructions[register[1]]
             layout = instruction & masks[8]
@@ -192,7 +215,7 @@ def process(instructions):
             operations[layout][opcode](sections)
 
             instructions_executed += 1
-            register[1] += 1
+            modify_program_counter(register[1] + 1)
     except Exception as e:
         print("Error!")
         print("Line: {} Layout: {} Opcode: {} Arguments: {}".format(register[1], layout, opcode, sections))
