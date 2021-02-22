@@ -202,7 +202,7 @@ def process(instructions):
     print("Total Time: {} seconds".format(round(total_time, 6)))
     print("Instructions Executed: {}".format(instructions_executed))
     print("Average Time per Instruction: {} microseconds".format(
-        round(total_time / instructions_executed * 1e6)
+        round(total_time / instructions_executed * 1e6, 2)
     ))
 
 instructions = (
