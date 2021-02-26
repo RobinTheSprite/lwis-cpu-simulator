@@ -112,10 +112,10 @@ def xor_f(args):
 
 
 def shuffle_move(args):
-    check_register(args[0])
-    check_register(args[1])
-    check_register(args[2])
-    register[args[0]], register[args[1]], register[args[2]] = register[args[3]], register[args[4]], register[args[5]]
+    for i in range(0, 3):
+        if args[i] != 0:
+            check_register(args[i])
+            register[args[i]] = register[args[i + 3]]
 
 
 operations = (
