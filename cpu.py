@@ -115,7 +115,7 @@ def shuffle_move(args):
     for i in range(0, 3):
         if args[i] != 0:
             check_register(args[i])
-            register[args[i]] = register[args[i + 3]]
+            register[args[i + 3]] = register[args[i]]
 
 
 operations = (
