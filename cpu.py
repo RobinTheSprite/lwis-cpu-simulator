@@ -302,4 +302,5 @@ instructions = (
     # End of loop
 )
 
-process(instructions)
+f = open("pascal.lwis", "r")
+process(list(map(int, f.readlines())))
